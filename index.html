@@ -3,277 +3,816 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>logtest — Link Hub</title>
-    <!-- Tailwind CSS CDN -->
+
+    <title>logtest_0 — Creator Profile</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        function copyDiscord(text, event) {
-            event.preventDefault();
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast(`디스코드 ID (${text}) 복사 완료!`, 'fa-brands fa-discord');
-            } catch (err) {
-                showToast('복사에 실패했습니다.', 'fa-triangle-exclamation');
-            }
-            document.body.removeChild(textArea);
-        }
-    </script>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Pretendard -->
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Pretendard:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Pretendard', sans-serif;
-            background-color: #f8fafc;
-            color: #0f172a;
+            margin: 0;
+            font-family: 'Inter', 'Pretendard', sans-serif;
+            background:
+                radial-gradient(circle at 50% -10%, #252525 0%, transparent 38%),
+                #090909;
+            color: #f5f5f5;
             overflow-x: hidden;
         }
-        .apple-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05);
-            transition: all 0.25s ease;
+
+        /* 배경 그리드 */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.035;
+            background-image:
+                linear-gradient(#fff 1px, transparent 1px),
+                linear-gradient(90deg, #fff 1px, transparent 1px);
+            background-size: 45px 45px;
+            mask-image: linear-gradient(to bottom, black, transparent 80%);
         }
-        .apple-card:hover {
+
+        /* 상단 빛 */
+        .top-glow {
+            position: fixed;
+            width: 500px;
+            height: 300px;
+            top: -180px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            filter: blur(150px);
+            opacity: 0.06;
+            pointer-events: none;
+        }
+
+        .container {
+            width: min(100% - 32px, 520px);
+            margin: auto;
+        }
+
+        /* 프로필 */
+        .profile-image {
+            position: relative;
+            width: 118px;
+            height: 118px;
+            margin: auto;
+        }
+
+        .profile-image::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                #ffffff,
+                #555,
+                #151515
+            );
+            z-index: -1;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #090909;
+        }
+
+        .verified {
+            position: absolute;
+            right: 3px;
+            bottom: 5px;
+            width: 27px;
+            height: 27px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            color: #000;
+            border: 3px solid #090909;
+            font-size: 10px;
+        }
+
+        /* 링크 */
+        .social-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            min-height: 68px;
+            padding: 0 18px;
+            margin-bottom: 10px;
+
+            border: 1px solid #242424;
+            background: rgba(17, 17, 17, 0.82);
+            border-radius: 16px;
+
+            transition:
+                transform .25s ease,
+                border-color .25s ease,
+                background .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .social-link:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-            border-color: #cbd5e1;
+            border-color: #555;
+            background: #151515;
+            box-shadow: 0 15px 40px rgba(0,0,0,.35);
+        }
+
+        .social-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #202020;
+            color: #ddd;
+            font-size: 17px;
+
+            transition:
+                background .25s ease,
+                color .25s ease,
+                transform .25s ease;
+        }
+
+        .social-link:hover .social-icon {
+            background: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .arrow {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #292929;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+
+            transition: .25s ease;
+        }
+
+        .social-link:hover .arrow {
+            color: #fff;
+            border-color: #555;
+            transform: translateX(3px);
+        }
+
+        /* 섹션 */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 34px 0 13px;
+            color: #666;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+        }
+
+        .section-title::after {
+            content: "";
+            height: 1px;
+            flex: 1;
+            background: #222;
+        }
+
+        /* 상태 */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #111;
+            border: 1px solid #292929;
+            color: #aaa;
+            font-size: 11px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #62e58a;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(98,229,138,.8);
+        }
+
+        /* 공유 버튼 */
+        .share-btn {
+            border: 1px solid #252525;
+            background: #111;
+            color: #aaa;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            transition: .25s ease;
+        }
+
+        .share-btn:hover {
+            color: #fff;
+            border-color: #555;
+            background: #181818;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            left: 50%;
+            bottom: 25px;
+            transform: translate(-50%, 30px);
+            opacity: 0;
+            pointer-events: none;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 12px 16px;
+            border-radius: 12px;
+
+            background: #151515;
+            border: 1px solid #333;
+            box-shadow: 0 15px 50px rgba(0,0,0,.5);
+
+            color: #eee;
+            font-size: 13px;
+
+            transition: .3s ease;
+            z-index: 100;
+            white-space: nowrap;
+        }
+
+        #toast.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: min(100% - 24px, 520px);
+            }
+
+            .profile-image {
+                width: 105px;
+                height: 105px;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center py-12 px-4 sm:px-6">
 
-    <!-- Top Action Bar -->
-    <div class="w-full max-w-2xl flex justify-between items-center mb-8">
-        <div class="flex items-center space-x-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-            <span class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Available for work</span>
+<body>
+
+<div class="top-glow"></div>
+
+<div class="container relative z-10 py-8 sm:py-12">
+
+    <!-- HEADER -->
+    <header class="flex items-center justify-between mb-14">
+
+        <div class="text-sm font-bold tracking-tight text-white">
+            logtest<span class="text-neutral-600">_0</span>
         </div>
-        <button onclick="shareProfile()" class="px-4 py-2 rounded-full text-xs font-medium bg-slate-200/70 hover:bg-slate-200 text-slate-700 transition-all flex items-center space-x-1.5 cursor-pointer">
-            <i class="fa-solid fa-share-nodes"></i>
-            <span>공유하기</span>
-        </button>
-    </div>
 
-    <!-- Main Container -->
-    <main class="w-full max-w-2xl flex flex-col items-center">
-        
-        <!-- Profile Header Section (Clean Centered Modern) -->
-        <div class="w-full apple-card rounded-3xl p-8 mb-6 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 text-center sm:text-left">
-            <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200 shadow-inner">
-                <img src="d.jpg" alt="프로필 아바타" class="w-full h-full object-cover">
+        <div class="flex items-center gap-2">
+            <span class="status">
+                <span class="status-dot"></span>
+                ONLINE
+            </span>
+
+            <button class="share-btn"
+                    onclick="shareProfile()">
+                <i class="fa-solid fa-arrow-up-from-bracket mr-1"></i>
+                공유
+            </button>
+        </div>
+
+    </header>
+
+
+    <!-- PROFILE -->
+    <main>
+
+        <section class="text-center">
+
+            <div class="profile-image mb-6">
+                <img src="d.jpg" alt="logtest_0 프로필">
+
+                <div class="verified">
+                    <i class="fa-solid fa-check"></i>
+                </div>
             </div>
-            <div class="flex flex-col justify-center flex-1">
-                <div class="flex items-center justify-center sm:justify-start space-x-2 mb-1">
-                    <h1 class="text-xl font-bold tracking-tight text-slate-900">logtest</h1>
-                    <span class="bg-indigo-50 text-indigo-600 text-[11px] font-bold px-2 py-0.5 rounded-full">PRO</span>
-                </div>
-                <p class="text-xs font-medium text-slate-500 mb-3">게이머 & 크리에이터 & 개발 지망생</p>
-                <p class="text-xs text-slate-600 leading-relaxed">
-                    소통과 기술을 사랑하며 다양한 플랫폼에서 활동하고 있습니다. 아래 링크에서 저의 모든 채널을 확인해보세요! ✨
-                </p>
+
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                logtest_0
+            </h1>
+
+            <p class="mt-3 text-sm leading-6 text-neutral-500">
+                Gamer · Creator · Developer
+                <br>
+                기록하고, 플레이하고, 만드는 사람.
+            </p>
+
+            <!-- SNS -->
+            <div class="flex justify-center gap-5 mt-6 text-neutral-500">
+
+                <a href="https://instagram.com/logtest_0"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="hover:text-white transition">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+                <a href="https://twitch.tv/logtest_0"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="hover:text-white transition">
+                    <i class="fa-brands fa-twitch"></i>
+                </a>
+
+                <a href="https://github.com/logtest0"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="hover:text-white transition">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+
+                <a href="https://www.youtube.com/@logtest_0"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="hover:text-white transition">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+
             </div>
+
+        </section>
+
+
+        <!-- SOCIAL -->
+        <div class="section-title">
+            Social
         </div>
 
-        <!-- Links Grid Container (2 Columns Grid) -->
-        <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            
-            <!-- 1. Instagram -->
-            <a href="https://instagram.com/logtest" target="_blank" rel="noopener noreferrer" class="apple-card p-4 rounded-2xl flex items-center justify-between group">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 flex items-center justify-center text-white text-base shadow-sm">
-                        <i class="fa-brands fa-instagram"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-rose-600 transition-colors">Instagram</h3>
-                        <p class="text-[11px] text-slate-500">@logtest</p>
-                    </div>
-                </div>
-                <i class="fa-solid fa-arrow-right text-xs text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all"></i>
-            </a>
 
-            <!-- 2. Twitch -->
-            <a href="https://twitch.tv/logtest" target="_blank" rel="noopener noreferrer" class="apple-card p-4 rounded-2xl flex items-center justify-between group">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center text-white text-base shadow-sm">
-                        <i class="fa-brands fa-twitch"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-purple-600 transition-colors">Twitch</h3>
-                        <p class="text-[11px] text-slate-500">@logtest</p>
-                    </div>
-                </div>
-                <i class="fa-solid fa-arrow-right text-xs text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all"></i>
-            </a>
+        <!-- Instagram -->
+        <a href="https://instagram.com/logtest_0"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="social-link">
 
-            <!-- 3. Discord -->
-            <a href="#" onclick="copyDiscord('logtest', event)" class="apple-card p-4 rounded-2xl flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center text-white text-base shadow-sm">
-                        <i class="fa-brands fa-discord"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">Discord</h3>
-                        <p class="text-[11px] text-slate-500">클릭하여 ID 복사</p>
-                    </div>
-                </div>
-                <i class="fa-solid fa-copy text-xs text-slate-300 group-hover:text-indigo-600 transition-all"></i>
-            </a>
+            <div class="social-left">
 
-            <!-- 4. Guns -->
-            <a href="https://guns.lol/logtest" target="_blank" rel="noopener noreferrer" class="apple-card p-4 rounded-2xl flex items-center justify-between group">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-amber-600 flex items-center justify-center text-white text-base shadow-sm">
-                        <i class="fa-solid fa-crosshairs"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition-colors">Guns.lol</h3>
-                        <p class="text-[11px] text-slate-500">@logtest</p>
-                    </div>
+                <div class="social-icon">
+                    <i class="fa-brands fa-instagram"></i>
                 </div>
-                <i class="fa-solid fa-arrow-right text-xs text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all"></i>
-            </a>
 
-            <!-- 5. Facebook -->
-            <a href="https://www.facebook.com/profile.php?id=61594784855365" target="_blank" rel="noopener noreferrer" class="apple-card p-4 rounded-2xl flex items-center justify-between group">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white text-base shadow-sm">
-                        <i class="fa-brands fa-facebook"></i>
+                <div>
+                    <div class="text-sm font-semibold">
+                        Instagram
                     </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Facebook</h3>
-                        <p class="text-[11px] text-slate-500">공식 프로필</p>
-                    </div>
-                </div>
-                <i class="fa-solid fa-arrow-right text-xs text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all"></i>
-            </a>
 
-            <!-- 6. Roblox -->
-            <a href="https://www.roblox.com/ko/users/11730199490/profile" target="_blank" rel="noopener noreferrer" class="apple-card p-4 rounded-2xl flex items-center justify-between group">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-rose-600 flex items-center justify-center text-white text-base shadow-sm">
-                        <i class="fa-solid fa-cube"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-rose-600 transition-colors">Roblox</h3>
-                        <p class="text-[11px] text-slate-500">@logtest</p>
+                    <div class="text-xs text-neutral-600 mt-0.5">
+                        @logtest_0
                     </div>
                 </div>
-                <i class="fa-solid fa-arrow-right text-xs text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all"></i>
-            </a>
-            
-            <!-- 7. GitHub -->
-            <a href="https://github.com/logtest" target="_blank" rel="noopener noreferrer" class="apple-card p-4 rounded-2xl flex items-center justify-between group">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white text-base shadow-sm">
-                        <i class="fa-brands fa-github"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-slate-700 transition-colors">GitHub</h3>
-                        <p class="text-[11px] text-slate-500">@logtest</p>
-                    </div>
-                </div>
-                <i class="fa-solid fa-arrow-right text-xs text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all"></i>
-            </a>
 
-            <!-- 8. YouTube -->
-            <a href="https://www.youtube.com/@logtest" target="_blank" rel="noopener noreferrer" class="apple-card p-4 rounded-2xl flex items-center justify-between group">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white text-base shadow-sm">
-                        <i class="fa-brands fa-youtube"></i>
+            </div>
+
+            <div class="arrow">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </div>
+
+        </a>
+
+
+        <!-- Twitch -->
+        <a href="https://twitch.tv/logtest_0"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="social-link">
+
+            <div class="social-left">
+
+                <div class="social-icon">
+                    <i class="fa-brands fa-twitch"></i>
+                </div>
+
+                <div>
+                    <div class="text-sm font-semibold">
+                        Twitch
                     </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-red-600 transition-colors">YouTube</h3>
-                        <p class="text-[11px] text-slate-500">@logtest</p>
+
+                    <div class="text-xs text-neutral-600 mt-0.5">
+                        Live streaming
                     </div>
                 </div>
-                <i class="fa-solid fa-arrow-right text-xs text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all"></i>
-            </a>
 
-            <!-- 9. League of Legends -->
-            <a href="https://www.fow.lol/find/kr/%EA%B9%80%EC%B9%98%EC%9E%A5%EC%9D%B812-KR1" target="_blank" rel="noopener noreferrer" class="apple-card p-4 rounded-2xl flex items-center justify-between group">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-white text-base shadow-sm">
-                        <i class="fa-solid fa-shield-halved"></i>
+            </div>
+
+            <div class="arrow">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </div>
+
+        </a>
+
+
+        <!-- Discord -->
+        <a href="#"
+           onclick="copyDiscord('logtest_0', event)"
+           class="social-link">
+
+            <div class="social-left">
+
+                <div class="social-icon">
+                    <i class="fa-brands fa-discord"></i>
+                </div>
+
+                <div>
+                    <div class="text-sm font-semibold">
+                        Discord
                     </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition-colors">League of Legends</h3>
-                        <p class="text-[11px] text-slate-500">김치장인12 #KR1</p>
+
+                    <div class="text-xs text-neutral-600 mt-0.5">
+                        logtest_0 · Click to copy
                     </div>
                 </div>
-                <i class="fa-solid fa-arrow-right text-xs text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all"></i>
-            </a>
 
-            <!-- 10. Email (Preparation) -->
-            <a href="#" onclick="showToast('이메일 채널은 준비 중입니다.', 'fa-triangle-exclamation'); return false;" class="apple-card p-4 rounded-2xl flex items-center justify-between group cursor-pointer opacity-75">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-slate-300 flex items-center justify-center text-slate-700 text-base shadow-sm">
-                        <i class="fa-solid fa-envelope"></i>
+            </div>
+
+            <div class="arrow">
+                <i class="fa-solid fa-copy text-xs"></i>
+            </div>
+
+        </a>
+
+
+        <!-- YouTube -->
+        <a href="https://www.youtube.com/@logtest_0"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="social-link">
+
+            <div class="social-left">
+
+                <div class="social-icon">
+                    <i class="fa-brands fa-youtube"></i>
+                </div>
+
+                <div>
+                    <div class="text-sm font-semibold">
+                        YouTube
                     </div>
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-900">Contact Email</h3>
-                        <p class="text-[11px] text-slate-500">준비 중</p>
+
+                    <div class="text-xs text-neutral-600 mt-0.5">
+                        @logtest_0
                     </div>
                 </div>
-                <i class="fa-solid fa-ban text-xs text-slate-400"></i>
-            </a>
 
+            </div>
+
+            <div class="arrow">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </div>
+
+        </a>
+
+
+        <!-- GAMING -->
+        <div class="section-title">
+            Gaming
         </div>
+
+
+        <!-- Roblox -->
+        <a href="https://www.roblox.com/ko/users/11730199490/profile"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="social-link">
+
+            <div class="social-left">
+
+                <div class="social-icon">
+                    <i class="fa-solid fa-cube"></i>
+                </div>
+
+                <div>
+                    <div class="text-sm font-semibold">
+                        Roblox
+                    </div>
+
+                    <div class="text-xs text-neutral-600 mt-0.5">
+                        @logtest_0
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </div>
+
+        </a>
+
+
+        <!-- League -->
+        <a href="https://www.fow.lol/find/kr/%EA%B9%80%EC%B9%98%EC%9E%A5%EC%9D%B812-KR1"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="social-link">
+
+            <div class="social-left">
+
+                <div class="social-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <div>
+                    <div class="text-sm font-semibold">
+                        League of Legends
+                    </div>
+
+                    <div class="text-xs text-neutral-600 mt-0.5">
+                        김치장인12 #KR1
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </div>
+
+        </a>
+
+
+        <!-- Guns -->
+        <a href="https://guns.lol/logtest_0"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="social-link">
+
+            <div class="social-left">
+
+                <div class="social-icon">
+                    <i class="fa-solid fa-crosshairs"></i>
+                </div>
+
+                <div>
+                    <div class="text-sm font-semibold">
+                        Guns
+                    </div>
+
+                    <div class="text-xs text-neutral-600 mt-0.5">
+                        @logtest_0
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </div>
+
+        </a>
+
+
+        <!-- DEVELOPMENT -->
+        <div class="section-title">
+            Development
+        </div>
+
+
+        <!-- Github -->
+        <a href="https://github.com/logtest0"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="social-link">
+
+            <div class="social-left">
+
+                <div class="social-icon">
+                    <i class="fa-brands fa-github"></i>
+                </div>
+
+                <div>
+                    <div class="text-sm font-semibold">
+                        GitHub
+                    </div>
+
+                    <div class="text-xs text-neutral-600 mt-0.5">
+                        @logtest0
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </div>
+
+        </a>
+
+
+        <!-- Contact -->
+        <a href="#"
+           onclick="showToast('이메일은 현재 준비중입니다!', 'fa-solid fa-envelope'); return false;"
+           class="social-link">
+
+            <div class="social-left">
+
+                <div class="social-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+
+                <div>
+                    <div class="text-sm font-semibold">
+                        Contact
+                    </div>
+
+                    <div class="text-xs text-neutral-600 mt-0.5">
+                        Coming soon
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                <i class="fa-solid fa-lock text-xs"></i>
+            </div>
+
+        </a>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="w-full max-w-2xl text-center mt-12 mb-4 text-xs text-slate-400">
-        <p>&copy; 2026 logtest. All rights reserved.</p>
+
+    <!-- FOOTER -->
+    <footer class="text-center mt-16 pb-5">
+
+        <div class="text-xs text-neutral-700">
+            © 2026 logtest_0
+        </div>
+
+        <div class="text-[10px] text-neutral-800 mt-2 tracking-widest uppercase">
+            Personal Creator Page
+        </div>
+
     </footer>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transition-all duration-300 translate-y-20 opacity-0 z-50 pointer-events-none">
-        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
-        <span id="toast-message" class="text-xs font-medium">알림 메시지</span>
-    </div>
+</div>
 
-    <!-- JavaScript -->
-    <script>
-        function shareProfile() {
-            const currentUrl = window.location.href;
+
+<!-- TOAST -->
+<div id="toast">
+    <i id="toast-icon" class="fa-solid fa-check text-white"></i>
+    <span id="toast-message">완료되었습니다.</span>
+</div>
+
+
+<script>
+
+    /* Discord 복사 */
+    function copyDiscord(text, event) {
+
+        event.preventDefault();
+
+        const textArea = document.createElement("textarea");
+
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+
+        document.body.appendChild(textArea);
+
+        textArea.focus();
+        textArea.select();
+
+        try {
+
+            document.execCommand("copy");
+
+            showToast(
+                `Discord ID ${text} copied`,
+                "fa-brands fa-discord"
+            );
+
+        } catch (error) {
+
+            showToast(
+                "복사에 실패했습니다.",
+                "fa-solid fa-triangle-exclamation"
+            );
+
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+
+    /* 프로필 공유 */
+    function shareProfile() {
+
+        const currentUrl = window.location.href;
+
+        if (navigator.share) {
+
+            navigator.share({
+                title: "logtest_0",
+                text: "logtest_0의 프로필",
+                url: currentUrl
+            }).catch(() => {});
+
+        } else {
+
             const textArea = document.createElement("textarea");
+
             textArea.value = currentUrl;
             textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+
             document.body.appendChild(textArea);
+
             textArea.focus();
             textArea.select();
+
             try {
-                document.execCommand('copy');
-                showToast('프로필 링크가 복사되었습니다!', 'fa-share-nodes');
-            } catch (err) {
-                showToast('링크 복사 실패', 'fa-triangle-exclamation');
+
+                document.execCommand("copy");
+
+                showToast(
+                    "프로필 링크가 복사되었습니다.",
+                    "fa-solid fa-link"
+                );
+
+            } catch (error) {
+
+                showToast(
+                    "링크 복사에 실패했습니다.",
+                    "fa-solid fa-triangle-exclamation"
+                );
+
             }
+
             document.body.removeChild(textArea);
         }
+    }
 
-        function showToast(message, iconClass = 'fa-circle-check') {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            const toastIcon = document.getElementById('toast-icon');
 
-            toastMsg.textContent = message;
-            toastIcon.className = `fa-solid ${iconClass} text-sm text-emerald-400`;
+    /* Toast */
+    let toastTimer;
 
-            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-            toast.classList.add('translate-y-0', 'opacity-100');
+    function showToast(message, icon = "fa-solid fa-check") {
 
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-            }, 3000);
-        }
-    </script>
+        const toast = document.getElementById("toast");
+        const messageElement = document.getElementById("toast-message");
+        const iconElement = document.getElementById("toast-icon");
+
+        messageElement.textContent = message;
+
+        iconElement.className = `${icon} text-white`;
+
+        toast.classList.add("show");
+
+        clearTimeout(toastTimer);
+
+        toastTimer = setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2800);
+    }
+
+</script>
+
 </body>
 </html>
